@@ -109,8 +109,7 @@ void setup() {
     mainLoopIsReady = true;
 }
 
-
-void loop() {
+void loop() {                 // core 1
   setBasicPositions();
 
   while (mainLoopIsReady) {
@@ -135,7 +134,7 @@ void serviceSetup() {
   serviceLoopIsReady = true;
 }
 
-void serviceLoop(void *parameter) {
+void serviceLoop(void *parameter) {     // core 0
   serviceSetup();
 
   while (1) {
