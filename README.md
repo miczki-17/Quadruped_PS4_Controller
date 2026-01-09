@@ -25,17 +25,16 @@ Naduś i trzymaj przyciski PS + SHARE na kontrolerze -> robot szuka kontrolera p
 Po sparowaniu robot jest gotowy do sterowania!
 
 
+## Media
+- Filmik prezentujący robota w ruchu: https://www.youtube.com/watch?v=MLlye4q7GO4
+- Zdjęcia robota w folderze: [Media](Media/)
+
 
 ### Completed Feautures
 - IK (inverse kinematics),
 - chodzenie przód / tył, prawo / lewo,
 - skręcanie,
 - rotacje roll, pitch, yaw.
-
-
-## Media
-- Filmik prezentujący robota w ruchu: https://www.youtube.com/watch?v=MLlye4q7GO4
-- Zdjęcia robota w folderze: [Media](Media/)
 
 
 ## Autor
