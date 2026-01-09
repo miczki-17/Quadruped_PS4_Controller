@@ -1,6 +1,8 @@
 # Quadruped sterowany padem PS4
 Czteronożny robot kroczący zaprojektowany i wydrukowany w technologii 3D, sterowany kontrolerem PS4, zbudowany przy użyciu serwomechanizmów oraz mikrokontrolera ESP32. Robot porusza się do przodu, do tyłu, w boki, skręca, zmienia wysokość, wykonuje rotacje w osiach roll, pitch, yaw.
 
+![Quadruped Wygląd](Media/zdj1.png)
+
 
 ## technologie
 - ESP32 (mikrokontroler)
@@ -15,6 +17,12 @@ Czteronożny robot kroczący zaprojektowany i wydrukowany w technologii 3D, ster
 - Skręcanie w lewo i w prawo
 - Rotacje wokół osi roll, pitch, yaw
 - Samodzielnie zaprojektowane części drukowane w 3D
+
+
+## Instrukcja uruchomienia
+Załącz zasilanie robota -> robot wstanie
+Naduś i trzymaj przyciski PS + SHARE na kontrolerze -> robot szuka kontrolera po adresie MAC
+Po sparowaniu robot jest gotowy do sterowania!
 
 
 ## Media
