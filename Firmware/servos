@@ -1,0 +1,90 @@
+#if PWM_CONTROLLER == ESP32
+
+
+int esp32Servos[LEGS_NUM * 3];
+
+
+void initServos() {
+  ESP32_ISR_Servos.useTimer(USE_ESP32_TIMER_NO);
+
+  for (int8_t i = 0; i < LEGS_NUM; i++) {
+    esp32Servos[i * 3 + 0] = ESP32_ISR_Servos.setupServo(legs[i].pin.alpha, SERVO_MIN, SERVO_MAX);
+    esp32Servos[i * 3 + 1] = ESP32_ISR_Servos.setupServo(legs[i].pin.beta, SERVO_MIN, SERVO_MAX);
+    esp32Servos[i * 3 + 2] = ESP32_ISR_Servos.setupServo(legs[i].pin.gamma, SERVO_MIN, SERVO_MAX);
+  }
+}
+
+/*void setPositions() {
+  for (int8_t i = 0; i < LEGS_NUM; i++) {
+    ESP32_ISR_Servos.setPosition(esp32Servos[i * 3 + 0], legs[i].angle.alpha + legs[i].angledefect.alpha);
+    ESP32_ISR_Servos.setPosition(esp32Servos[i * 3 + 1], legs[i].angle.beta + legs[i].angledefect.beta);
+    ESP32_ISR_Servos.setPosition(esp32Servos[i * 3 + 2], legs[i].angle.gamma + legs[i].angledefect.gamma);
+  }
+  }*/
+
+void setPosition(leg &_leg) {
+  setAngle(_leg);
+
+  ESP32_ISR_Servos.setPosition(esp32Servos[_leg.id.id * 3 + 0], legs[_leg.id.id].angle.alpha + legs[_leg.id.id].angledefect.alpha);
+  ESP32_ISR_Servos.setPosition(esp32Servos[_leg.id.id * 3 + 1], legs[_leg.id.id].angle.beta + legs[_leg.id.id].angledefect.beta);
+  ESP32_ISR_Servos.setPosition(esp32Servos[_leg.id.id * 3 + 2], legs[_leg.id.id].angle.gamma + legs[_leg.id.id].angledefect.gamma);
+}
+
+
+/*void setPositionX() {
+  for (int8_t i = 0; i < LEGS_NUM; i++) {
+    ESP32_ISR_Servos.setPosition(esp32Servos[i * 3 + 0], legs[i].angle.alpha + legs[i].angledefect.alpha + [&i] {if (legs[i].inverse.alpha) return -45; return 45;}());
+    ESP32_ISR_Servos.setPosition(esp32Servos[i * 3 + 1], legs[i].angle.beta + legs[i].angledefect.beta );
+    ESP32_ISR_Servos.setPosition(esp32Servos[i * 3 + 2], legs[i].angle.gamma + legs[i].angledefect.gamma );
+  }
+  }*/
+
+
+
+
+
+double toDegrees(double angleInRadians) {
+  return angleInRadians * RAD_TO_DEG;
+}
+
+void setAngle(leg &_leg) {
+  legs[_leg.id.id].angle.alpha = toDegrees(legSolve[_leg.id.id].angle.alpha);
+  legs[_leg.id.id].angle.beta  = toDegrees(legSolve[_leg.id.id].angle.beta);
+  legs[_leg.id.id].angle.gamma = toDegrees(legSolve[_leg.id.id].angle.gamma);
+}
+
+
+
+
+void standUp() {
+  legs[LEGLF].realfoot.x = -60;     legs[LEGRF].realfoot.x = 60;      legs[LEGLH].realfoot.x = -60;     legs[LEGRH].realfoot.x = 60;
+  legs[LEGLF].realfoot.y = 60;      legs[LEGRF].realfoot.y = 60;      legs[LEGLH].realfoot.y = -60;     legs[LEGRH].realfoot.y = -60;
+  legs[LEGLF].realfoot.z = -10;     legs[LEGRF].realfoot.z = -10;     legs[LEGLH].realfoot.z = -10;     legs[LEGRH].realfoot.z = -10;
+
+  delay(1000);
+
+  for (int8_t i = 0; i < 50; i++) {
+    legSolve[LEGLF] = ikLegLF.solve();
+    legSolve[LEGRF] = ikLegRF.solve();
+    legSolve[LEGLH] = ikLegLH.solve();
+    legSolve[LEGRH] = ikLegRH.solve();
+
+    for (int8_t i = 0; i < LEGS_NUM; i++)
+      setPosition(legs[i]);
+
+    body.position.z++;
+    delay(50 - i);
+  }
+}
+
+void setBasicPositions() {
+  double start_point_x = 60;
+  double start_point_y = 60;
+  double start_point_z = -10;
+  
+  legs[LEGLF].realfoot.x = -start_point_x;     legs[LEGRF].realfoot.x = start_point_x;      legs[LEGLH].realfoot.x = -start_point_x;     legs[LEGRH].realfoot.x = start_point_x;
+  legs[LEGLF].realfoot.y = start_point_y;      legs[LEGRF].realfoot.y = start_point_y;      legs[LEGLH].realfoot.y = -start_point_y;     legs[LEGRH].realfoot.y = -start_point_y;
+  legs[LEGLF].realfoot.z = start_point_z;     legs[LEGRF].realfoot.z = start_point_z;     legs[LEGLH].realfoot.z = start_point_z;     legs[LEGRH].realfoot.z = start_point_z;
+}
+
+#endif
