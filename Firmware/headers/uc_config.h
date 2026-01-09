@@ -1,0 +1,32 @@
+#ifndef UC_CONFIG_H
+#define UC_CONFIG_H
+
+
+//#define BAUD 115200
+
+
+#define WIFI_CONTROLLER ESP32
+#define PWM_CONTROLLER	ESP32
+
+
+#define MAIN_LOOP_TIME			4
+#define SERVICE_LOOP_TIME		10
+#define FAST_SERVICE_LOOP_TIME	5
+
+
+#if PWM_CONTROLLER == ESP32
+	#define TIMER_INTERRUPT_DEBUG 1
+	#define ISR_SERVO_DEBUG		  1
+	#define USE_ESP32_TIMER_NO	  0
+#endif
+
+
+// random seed
+
+#define RANDOM_SEED_CONTROLLER ESP32
+#if RANDOM_SEED_CONTROLLER == ESP32
+	#define RANDOM_SEED_PIN 3
+#endif
+
+
+#endif
