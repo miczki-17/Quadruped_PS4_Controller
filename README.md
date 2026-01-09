@@ -18,7 +18,7 @@ Czteronożny robot kroczący zaprojektowany i wydrukowany w technologii 3D, ster
 
 
 ## Media
-- Filmik prezentujący robota w ruchu:
+- Filmik prezentujący robota w ruchu: https://www.youtube.com/watch?v=MLlye4q7GO4
 - Zdjęcia robota w folderze
 
 
