@@ -39,4 +39,4 @@ Po sparowaniu robot jest gotowy do sterowania!
 
 ## Autor
 [Mikołaj Papierski]
-kontakt: [miczkipap@gmail.com]
+kontakt: [mikolaj.papierski20@gmail.com]
