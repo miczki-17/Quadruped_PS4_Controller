@@ -47,6 +47,8 @@ void onConnectedController(ControllerPtr ctl) {
   }*/
 
   ctl->setColorLED(0x00, 0xff, 0x00);
+
+  gait.resetToDefault();
   
   isControllerConnected = true;
 }
@@ -213,66 +215,77 @@ void processGamepad(ControllerPtr ctl) {
   // buttons, etc...
 
   
-  if (ctl->a()) {
-    if (body.position.z > Z_HOP_MIN) {
-      body.position.z--;
-      delay(8);
-    }
-  }
+  // if (ctl->a()) {
+  //   if (body.position.z > Z_HOP_MIN) {
+  //     body.position.z--;
+  //     delay(8);
+  //   }
+  // }
 
-  if (ctl->y()) {
-    if (body.position.z < Z_HOP_MAX) {
-      body.position.z++;
-      delay(8);
-    }
-  }
+  // if (ctl->y()) {
+  //   if (body.position.z < Z_HOP_MAX) {
+  //     body.position.z++;
+  //     delay(8);
+  //   }
+  // }
   
 
-  if (ctl->b()) {
-    gait.setDirection(RIGHT_ROTATION);
-  }
+  // if (ctl->b()) {
+  //   gait.setDirection(RIGHT_ROTATION);
+  // }
 
-  if (ctl->x()) {
-    gait.setDirection(LEFT_ROTATION);
-  }
+  // if (ctl->x()) {
+  //   gait.setDirection(LEFT_ROTATION);
+  // }
 
 
-  if (ctl->r1()) {
-    gait.attackMove();
-  }
+  // if (ctl->r1()) {
+  //   gait.attackMove();
+  // }
   
 
 
-  //ctl->playDualRumble(0 /* delayedStartMs */, 250 /* durationMs */, 0x80 /* weakMagnitude */,
-                        //0x40 /* strongMagnitude */);
+  // //ctl->playDualRumble(0 /* delayedStartMs */, 250 /* durationMs */, 0x80 /* weakMagnitude */,
+  //                       //0x40 /* strongMagnitude */);
 
 
-  if (ctl->dpad()) {
-    switch (ctl->dpad()) {
-      case RIGHT_BUTTON:
-        gait.setDirection(RIGHT);
-        break;
+  // if (ctl->dpad()) {
+  //   switch (ctl->dpad()) {
+  //     case RIGHT_BUTTON:
+  //       gait.setDirection(RIGHT);
+  //       break;
 
-      case LEFT_BUTTON:
-        gait.setDirection(LEFT);
-        break;
+  //     case LEFT_BUTTON:
+  //       gait.setDirection(LEFT);
+  //       break;
 
-      case UP_BUTTON:
-        gait.setDirection(STRAIGHT);
-        break;
+  //     case UP_BUTTON:
+  //       gait.setDirection(STRAIGHT);
+  //       break;
 
-      case DOWN_BUTTON:
-        gait.setDirection(BACK);
-        break;
+  //     case DOWN_BUTTON:
+  //       gait.setDirection(BACK);
+  //       break;
 
-      default:
-        break;
-    }
-  }
+  //     default:
+  //       break;
+  //   }
+  // }
+
+  float vx = (ctl->axisX() / 512.0f * 150.0f);
+  float vy = -(ctl->axisY() / 512.0f * 150.0f);
+  float omega = ctl->axisRX() / 512.0f * 1.5f;  // czułość obrotu
+
+  // --- POPRAWIONE DEADZONY (muszą sprawdzać właściwe osie) ---
+  if (abs(ctl->axisX()) < LEFT_DRAG_ZONE) vx = 0;
+  if (abs(ctl->axisY()) < LEFT_DRAG_ZONE) vy = 0;
+  if (abs(ctl->axisRX()) < RIGHT_DRAG_ZONE) omega = 0;
+
+  gait.setVelocity(vx, vy, omega);
 
   // Another way to query controller data is by getting the buttons() function.
   // See how the different "dump*" functions dump the Controller info.
-  bodyMapGamepad(ctl);
+  //bodyMapGamepad(ctl);
   //changePadColor(ctl);
   dumpGamepad(ctl);
 }
