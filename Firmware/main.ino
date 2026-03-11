@@ -17,7 +17,7 @@
 #include <Bluepad32.h>
 
 // ==========================================
-// --- MPU6050 KONFIGURACJA I ZMIENNE ---
+//           MPU6050 CONFIGURATION
 // ==========================================
 #include <Wire.h>
 #include <MPU6050_light.h>
@@ -25,14 +25,14 @@
 MPU6050 mpu(Wire);
 
 // PARAMETRY DO REGULACJI:
-float mpuAlpha = 0.05f;            // Współczynnik filtra dolnoprzepustowego
-float mpuCompensationGain = -1.6f; // Siła i kierunek kompensacji
+float mpuAlpha = 0.05f;            // LPF filter factor
+float mpuCompensationGain = -1.6f; // force and direction of compensation
 
 float targetPitch = 0.0f;
 float targetRoll = 0.0f;
 float currentPitch = 0.0f;
 float currentRoll = 0.0f;
-bool mpuReady = false;             // Blokuje wyginanie robota zanim wstanie
+bool mpuReady = false;             // IS MPU Ready?
 // ==========================================
 
 ControllerPtr myControllers[BP32_MAX_GAMEPADS];
@@ -82,7 +82,8 @@ void setup() {
   Serial.printf("BD Addr: %2X:%2X:%2X:%2X:%2X:%2X\n", addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]);
 #endif
 
-  // --- START MPU6050 BEZ KALIBRACJI ---
+  // MPU6050 start without calibration
+  // ------------------------------------
   Wire.begin();
   byte status = mpu.begin();
 #ifdef BAUD
@@ -116,24 +117,22 @@ void loop() {
 
   while (mainLoopIsReady) {
     
-    // --- 1. AKTUALIZACJA I FILTROWANIE MPU ---
     mpu.update();
     
     if (mpuReady) {
-      // 1. Pobieramy poprawnie dane z MPU (X to prawo/lewo, Y to przód/tył)
+      // X -> right / left       Y -> forward / backward
       targetRoll = constrain(mpu.getAngleX(), -35.0f, 35.0f);
       targetPitch = constrain(mpu.getAngleY(), -35.0f, 35.0f);
       
-      // 2. Filtr dolnoprzepustowy (LPF)
+      // LOW pass filter (LPF)
       currentRoll += mpuAlpha * (targetRoll - currentRoll);
       currentPitch += mpuAlpha * (targetPitch - currentPitch);
 
-      // 3. --- KROSOWANIE OSI DO KINEMATYKI ---
-      // Zamieniamy zmienne miejscami przy wstrzykiwaniu do IK!
+      // AXIS crossing for IK
       body.orientation.pitch = currentRoll * mpuCompensationGain; 
       body.orientation.roll = currentPitch * mpuCompensationGain; 
     } else {
-      // Robot jeszcze nie wstał – blokujemy kąty na 0
+      // Robot isn`t standing -> block 0 deg
       body.orientation.pitch = 0.0f;
       body.orientation.roll = 0.0f;
     }
@@ -157,34 +156,33 @@ void serviceSetup() {
 void serviceLoop(void *parameter) {
   serviceSetup();
 
-  // Pierwsza pętla: Czekanie na połączenie i sekwencja wstawania
+  // Waiting for conection and update
   while (1) {
     bool dataUpdated = BP32.update();
     if (dataUpdated) {
       standUp();
       
-      // --- OPÓŹNIONA KALIBRACJA MPU ---
+      // MPU calibration
 #ifdef BAUD
       Serial.println(F("Wstaje... Czekam 1.5s na pozycje docelowa."));
 #endif
-      // Usypiamy to zadanie na 1.5 sekundy, żeby serwa doszły do zera
+      // wait for servos
       vTaskDelay(1500 / portTICK_PERIOD_MS); 
       
 #ifdef BAUD
       Serial.println(F("Kalibruje idealny poziom. NIE RUSZAJ ROBOTA!"));
 #endif
-      mpu.calcOffsets(); // Zapisanie idealnego zera
-      mpuReady = true;   // Odblokowanie balansowania w pętli loop()
+      mpu.calcOffsets(); // Save 0
+      mpuReady = true;   // unlock robot balancing
 #ifdef BAUD
       Serial.println(F("Samopoziomowanie wlaczone!"));
 #endif
-      // --------------------------------
 
       break;
     }
   }
 
-  // Druga pętla: Regularne odczyty pada i generowanie chodu
+  // Read Controller & Walk generate
   while (1) {
     bool dataUpdatedFromController = BP32.update();
 
