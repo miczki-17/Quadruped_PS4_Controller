@@ -72,4 +72,4 @@ Projekt podzielony jest modułowo dla łatwego utrzymania i rozwoju:
 * `main.ino` - Główny szkielet programu i inicjalizacja zadań (Tasks).
 
 ---
-*Autor: [Twoje Imię i Nazwisko / Email]*
+*Autor: [Mikołaj Papierski / mikolaj.papierski20@gmail.com]*
