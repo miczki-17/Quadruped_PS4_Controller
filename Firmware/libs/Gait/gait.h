@@ -26,39 +26,39 @@ private:
     float _phase = 0.0f;
 
     // ==========================================
-    // --- PARAMETRY PR?DKO?CI ---
+    // --- VELOCITY PARAMETERS ---
     // ==========================================
     const float _maxVelocity = 150.0f;  // mm/s
-    const float _maxOmega = 3.0f;       // rad/s (maksymalna predkosc obrotu z pada)
-    const float _alphaFilter = 0.1f;    // Filtr LPF dla wektorów ruchu
+    const float _maxOmega = 3.0f;       // rad/s (maximum rotation speed from gamepad)
+    const float _alphaFilter = 0.1f;    // Low-Pass Filter (LPF) for motion vectors
 
     // ==========================================
-    // --- DYNAMICZNA CZ?STOTLIWO?? KROKU ---
+    // --- DYNAMIC STEP FREQUENCY ---
     // ==========================================
-    float _currentStepFrequency = 2.2f; // Aktualna cz?stotliwosc (Hz)
-    float _minStepFrequency = 1.5f;     // Wolny krok przy starcie
-    float _maxStepFrequency = 3.0f;     // Szybki klus przy max predkosci
+    float _currentStepFrequency = 2.2f; // Current frequency (Hz)
+    float _minStepFrequency = 1.5f;     // Slow step at startup
+    float _maxStepFrequency = 3.0f;     // Fast trot at max speed
 
     // ==========================================
-    // --- DYNAMICZNA WYSOKO?? KROKU ---
+    // --- DYNAMIC STEP HEIGHT ---
     // ==========================================
-    float _maxStepHeight = 38.0f;       // Maksymalna wysokosc podniesienia nogi
-    float _minStepHeight = 18.0f;       // Minimalna wysokosc (zeby nie szural)
+    float _maxStepHeight = 38.0f;       // Maximum leg lift height
+    float _minStepHeight = 18.0f;       // Minimum height (to prevent dragging)
     float _targetStepHeight = 0.0f;
     float _currentStepHeight = 0.0f;
-    float _stepHeightAlpha = 0.08f;     // Plynnosc zmiany wysokosci nogi
+    float _stepHeightAlpha = 0.08f;     // Smoothness of leg height change
 
     // ==========================================
-    // --- OBNI?ANIE TU?OWIA (COMBAT STANCE) ---
+    // --- BODY DROP (COMBAT STANCE) ---
     // ==========================================
-    float _maxBodyDrop = 5.0f;         // Max obnizenie tulowia w mm przy pelnej predkosci
+    float _maxBodyDrop = 5.0f;         // Max body drop in mm at full speed
     float _currentBodyDrop = 0.0f;
 
     // ==========================================
-    // --- POCHYLANIE (PITCH & ROLL LEAN) ---
+    // --- BODY LEAN (PITCH & ROLL) ---
     // ==========================================
-    float _pitchMultiplier = 0.0f;     // Wspólczynnik pochylania przod/tyl?
-    float _rollMultiplier = 0.0f;      // Wspólczynnik pochylania na boki
+    float _pitchMultiplier = 0.0f;     // Forward/backward lean multiplier
+    float _rollMultiplier = 0.0f;      // Sideways lean multiplier
 
     float _omega = 0.0f;
     float _filteredOmega = 0.0f;
@@ -67,10 +67,10 @@ private:
     float rotationGain = 1.5f;
 
     float legPhaseOffset[4] = {
-        0.0f,   // LF
-        0.5f,   // RF
-        0.5f,   // LH
-        0.0f    // RH
+        0.0f,   // LF (Left Front)
+        0.5f,   // RF (Right Front)
+        0.5f,   // LH (Left Hind)
+        0.0f    // RH (Right Hind)
     };
 
     void computeFootTrajectory(int legIndex, float legPhase);
