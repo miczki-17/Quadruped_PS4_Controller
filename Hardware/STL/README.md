@@ -1,4 +1,4 @@
-#**Parametry druku**
+# **Parametry druku**
   *Materiał:*
     PLA,
   *Wypełnienie*:
