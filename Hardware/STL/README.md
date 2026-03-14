@@ -1,5 +1,5 @@
 # **Parametry druku**
-  *Materiał:*
+  # *Materiał:*
     PLA,
-  *Wypełnienie*:
+  # *Wypełnienie*:
     20%
