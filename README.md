@@ -9,8 +9,8 @@ Zaawansowany, czteronożny robot kroczący zaprojektowany od zera (CAD 3D) i opr
 
 🎥
 <div align="center">
-  <img src="Media/Images/quadruped.gif" width="500" alt="Chód robota">
-  <p><i>Rys. 1: Demonstracja chodu robota w czasie rzeczywistym.</i></p>
+  <img src="Media/Images/quadruped.gif" width="400" alt="Chód robota">
+  <p><i>GIF. 1: Demonstracja chodu robota w czasie rzeczywistym.</i></p>
 </div>
 
 ---
