@@ -7,7 +7,7 @@
 
 Zaawansowany, czteronożny robot kroczący zaprojektowany od zera (CAD 3D) i oprogramowany w języku C++. Projekt demonstruje praktyczne zastosowanie kinematyki odwrotnej (IK), systemów czasu rzeczywistego (FreeRTOS) oraz aktywnej stabilizacji z wykorzystaniem fuzji danych z czujników (IMU).
 
-🎥 **[Zobacz robota w akcji (YouTube)](https://www.youtube.com/watch?v=MLlye4q7GO4)**
+🎥 ![Animacja chodu robota](Images/my_quadruped.gif)
 
 ---
 
