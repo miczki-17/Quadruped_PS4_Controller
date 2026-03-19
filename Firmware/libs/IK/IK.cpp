@@ -46,18 +46,18 @@ iksolver IK::solve() {
 	double lz_body_trim_pitch = H_pitch * sin(_body->orientation.pitch * DEG_TO_RAD);
 	double lx_body_trim_pitch = H_pitch * cos(_body->orientation.pitch * DEG_TO_RAD);
 
-	double H_yaw = _leg->realbody.x;
-	double lx_body_trim_yaw = H_yaw * cos(_body->orientation.yaw * DEG_TO_RAD);
-	double ly_body_trim_yaw = H_yaw * sin(_body->orientation.yaw * DEG_TO_RAD);
+	//double H_yaw = _leg->realbody.x;
+	//double lx_body_trim_yaw = H_yaw * cos(_body->orientation.yaw * DEG_TO_RAD);
+	//double ly_body_trim_yaw = H_yaw * sin(_body->orientation.yaw * DEG_TO_RAD);
 
 
+    // _leg param - delta = trim
 
-
-	point l_trim{
-		(_leg->realbody.x - lx_body_trim_pitch) - (_leg->realbody.x - lx_body_trim_yaw),
-		(_leg->realbody.y - ly_body_trim_roll) - ly_body_trim_yaw,
-		lz_body_trim_roll + lz_body_trim_pitch
-	};
+	//point l_trim{
+	//	(_leg->realbody.x - lx_body_trim_pitch) - (_leg->realbody.x - lx_body_trim_yaw),
+	//	(_leg->realbody.y - ly_body_trim_roll) - ly_body_trim_yaw,
+	//	lz_body_trim_roll + lz_body_trim_pitch
+	//};
 
 
 	double lx = _leg->realfoot.x - _body->position.x - l_trim.x; if (_leg->inverse.x) { lx = -lx; }
