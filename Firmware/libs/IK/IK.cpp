@@ -38,26 +38,41 @@ iksolver IK::solve() {
 
 	// get roll, pitch and yaw trim
 
-	double H_roll = _leg->realbody.y;
-	double lz_body_trim_roll = H_roll * sin(_body->orientation.roll * DEG_TO_RAD);
-	double ly_body_trim_roll = H_roll * cos(_body->orientation.roll * DEG_TO_RAD);
+double H_roll = _leg->realbody.y;
+double lz_body_trim_roll = H_roll * sin(_body->orientation.roll * DEG_TO_RAD);
+double ly_body_trim_roll = H_roll * cos(_body->orientation.roll * DEG_TO_RAD);
 
-	double H_pitch = _leg->realbody.x;
-	double lz_body_trim_pitch = H_pitch * sin(_body->orientation.pitch * DEG_TO_RAD);
-	double lx_body_trim_pitch = H_pitch * cos(_body->orientation.pitch * DEG_TO_RAD);
+double H_pitch = _leg->realbody.x;
+double lz_body_trim_pitch = H_pitch * sin(_body->orientation.pitch * DEG_TO_RAD);
+double lx_body_trim_pitch = H_pitch * cos(_body->orientation.pitch * DEG_TO_RAD);
 
-	//double H_yaw = _leg->realbody.x;
-	//double lx_body_trim_yaw = H_yaw * cos(_body->orientation.yaw * DEG_TO_RAD);
-	//double ly_body_trim_yaw = H_yaw * sin(_body->orientation.yaw * DEG_TO_RAD);
+//double H_yaw = _leg->realbody.x;
+//double lx_body_trim_yaw = H_yaw * cos(_body->orientation.yaw * DEG_TO_RAD);
+//double ly_body_trim_yaw = H_yaw * sin(_body->orientation.yaw * DEG_TO_RAD);
 
 
-    // _leg param - delta = trim
+double c_trim_length = sqrt(_leg->realbody.x * _leg->realbody.x + _leg->realbody.y * _leg->realbody.y);
 
-	//point l_trim{
-	//	(_leg->realbody.x - lx_body_trim_pitch) - (_leg->realbody.x - lx_body_trim_yaw),
-	//	(_leg->realbody.y - ly_body_trim_roll) - ly_body_trim_yaw,
-	//	lz_body_trim_roll + lz_body_trim_pitch
-	//};
+double start_angle = atan2(_leg->realbody.y, _leg->realbody.x);
+double yaw_angle = _body->orientation.yaw * DEG_TO_RAD;
+
+double lx_body_trim_yaw = c_trim_length * cos(start_angle + yaw_angle);
+double ly_body_trim_yaw = c_trim_length * sin(start_angle + yaw_angle);
+
+
+double delta_x_pitch = _leg->realbody.x - lx_body_trim_pitch;
+double delta_y_roll = _leg->realbody.y - ly_body_trim_roll;
+
+double delta_x_yaw = _leg->realbody.x - lx_body_trim_yaw;
+double delta_y_yaw = _leg->realbody.y - ly_body_trim_yaw;
+
+
+
+point l_trim{
+	delta_x_pitch - delta_x_yaw,
+	delta_y_roll - delta_y_yaw,
+	_leg->realbody.z + lz_body_trim_roll + lz_body_trim_pitch
+};
 
 
 	double lx = _leg->realfoot.x - _body->position.x - l_trim.x; if (_leg->inverse.x) { lx = -lx; }
