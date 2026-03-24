@@ -99,6 +99,28 @@ void Gait2::computeFootTrajectory(int legIndex, float phase)
     float moveY = 0.0f;
     float dz = 0.0f;
 
+
+    // cycle infill parameter
+    /*float dytyFactor = x val
+
+    if(phase < dutyFactor)
+    {
+        float t = phase / dutyFactor;     // 0 -> 1
+        moveX = -stepLengthX * (t - 0.5f);
+        moveY = -stepLengthY * (t - 0.5f);
+    }
+    else
+    {
+        // SWING (foot in the air)
+        float t = (phase - dutyFactor) / (1.0f - dutyFactor);   // 0 -> 1
+        moveX = stepLengthX * (t - 0.5f);
+        moveY = stepLengthY * (t - 0.5f);
+
+        // Lifting the foot along a sinusoid - using VARIABLE height
+        dz = _currentStepHeight * sin(t * PI);
+    }*/
+
+    
     // STANCE / SWING
     if (phase < 0.5f)
     {
